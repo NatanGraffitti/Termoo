@@ -24,107 +24,81 @@ lista_palavras_u7 = ["univoco", "utiliza", "urgente", "unificar", "usando", "uru
 
 #INICIO - print que explica as regras do game:
 print("Bem-vindo ao jogo!")
-print("")
 print("REGRAS")
-print("1 - Você pode escolher o nivel de dificuldade de 5, 6, ou 7 caracteres.")
-print("2 - A quantidade de caracteres sera a quantidade de chances.")
+print("1 - Você pode escolher o nível de dificuldade de 5, 6, ou 7 caracteres.")
+print("2 - A quantidade de caracteres será a quantidade de chances.")
 print("3 - Ao errar, mostra quais letras estão na posição correta.")
 print("4 - Pode usar Ç, mas não acentos.")
 print("5 - O jogo termina ao fim das tentativas.")
-print("")
-print("Boa sorte!")
-print("")
+print("Boa sorte!\n")
 
-#inputs que solicitam o nivel de dificuldade do jogo e com qual letra irá começar a palavra para poder assim escolher a lista onde vai ser usado o random
-quantidade_letras = input("Digite com quantas letras você deseja que a palavra tenha (5, 6 ou 7): ")
-letra_inicial = input("Digite a vogal inicial da palavra (a, e, i, o, u): ")
+# Função que verifica se a entrada é válida
+def obter_input(prompt, valid_inputs):
+    while True:
+        valor = input(prompt).lower()
+        if valor in valid_inputs:
+            return valor
+        print(f"Entrada inválida. Por favor, insira um valor válido ({', '.join(valid_inputs)}).")
 
-#função que com base nas entradas do user selecionam a lista respectiva
+# Solicitando entradas
+quantidade_letras = obter_input("Digite com quantas letras você deseja que a palavra tenha (5, 6 ou 7): ", ['5', '6', '7'])
+letra_inicial = obter_input("Digite a vogal inicial da palavra (a, e, i, o, u): ", ['a', 'e', 'i', 'o', 'u'])
+
+# Função que seleciona a palavra
 def escolher_palavra(letra, tamanho):
-    if letra == 'a':
-        if tamanho == "5":
-            return random.choice(lista_palavras_a5)
-        elif tamanho == "6":
-            return random.choice(lista_palavras_a6)
-        elif tamanho == "7":
-            return random.choice(lista_palavras_a7)
-            
-    elif letra == 'e':
-        if tamanho == "5":
-            return random.choice(lista_palavras_e5)
-        elif tamanho == "6":
-            return random.choice(lista_palavras_e6)
-        elif tamanho == "7":
-            return random.choice(lista_palavras_e7)
-            
-    elif letra == 'i':
-        if tamanho == "5":
-            return random.choice(lista_palavras_i5)
-        elif tamanho == "6":
-            return random.choice(lista_palavras_i6)
-        elif tamanho == "7":
-            return random.choice(lista_palavras_i7)
-            
-    elif letra == 'o':
-        if tamanho == "5":
-            return random.choice(lista_palavras_o5)
-        elif tamanho == "6":
-            return random.choice(lista_palavras_o6)
-        elif tamanho == "7":
-            return random.choice(lista_palavras_o7)
-            
-    elif letra == 'u':
-        if tamanho == "5":
-            return random.choice(lista_palavras_u5)
-        elif tamanho == "6":
-            return random.choice(lista_palavras_u6)
-        elif tamanho == "7":
-            return random.choice(lista_palavras_u7)
-#se não for correspondente com as listas da opção inválida            
-    else:
-        print("Opção inválida.")
-        return None
+    listas = {
+        'a': [lista_palavras_a5, lista_palavras_a6, lista_palavras_a7],
+        'e': [lista_palavras_e5, lista_palavras_e6, lista_palavras_e7],
+        'i': [lista_palavras_i5, lista_palavras_i6, lista_palavras_i7],
+        'o': [lista_palavras_o5, lista_palavras_o6, lista_palavras_o7],
+        'u': [lista_palavras_u5, lista_palavras_u6, lista_palavras_u7]
+    }
+    indices = {'5': 0, '6': 1, '7': 2}
+    return random.choice(listas[letra][indices[tamanho]])
 
-#função que libera as letras que estiverem na posição certa com a palavra escolhida e se não, coloca _
+# Função que verifica a tentativa
 def verificar_tentativa(palavra, tentativa):
-    resultado = "" #variável que recebe 
-    for i in range(len(palavra)): #p/ indice no espaço de palavra:
-        if tentativa[i] == palavra[i]: #se o indice (letra) em tentativa for igual (mesmo local da palavra correta)
-            resultado += tentativa[i] #o índice completa a letra no espaço 
+    resultado = ""
+    for i in range(len(palavra)):
+        if tentativa[i] == palavra[i]:
+            resultado += tentativa[i]  # letra correta na posição correta
+        elif tentativa[i] in palavra:
+            resultado += tentativa[i].upper()  # letra correta, mas posição errada
         else:
-            resultado += "_" #se não, completa o espaço com _
+            resultado += "_"
     return resultado
 
-#chama a função e escolhe uma palavra random da lista com base na vogal inicial e na quantidade de letras
-palavra = escolher_palavra(letra_inicial, quantidade_letras) # a palavra escolhida é armazenada na variável palavra
-
-#função para não autorizar o uso de acentos nos chutes
+# Função para remover acentos
 def remover_acentos(texto):
-    return ''.join(
-        c for c in unicodedata.normalize('NFD', texto)
-        if unicodedata.category(c) != 'Mn'
-    )
+    return ''.join(c for c in unicodedata.normalize('NFD', texto) if unicodedata.category(c) != 'Mn')
 
-if palavra: #se em palavra
-    tentativas = int(quantidade_letras) #tentativas recebe o inteiro respectivo a quantidade de letras
-    for tentativa_num in range(tentativas): #para o numero de tentativas no espaço de tentativas - define quantidade de tentativas == quantidade de letras
-        tentativa = input(f"Tentativa {tentativa_num + 1}: ") #imput que recebe a primeira tentativa do user em terminal
-        tentativa = remover_acentos(tentativa.lower()) #remove acentos possíveis na entrada do usuário
-        
-        #se a largura (numero de letras) da tentativa for diferente da quantidade de letras definifa    
-        if len(tentativa) != len(palavra):
-            print(f"A palavra deve ter exatamente {len(palavra)} letras. Tente novamente.")
-            continue #printa avisando e não tira uma chance de chute do user 
-        
-        if tentativa[0] != letra_inicial: #se a tentiva começar com a letra diferente do combinado
-            print(f"A palavra deve começar com a letra '{letra_inicial}'. Tente novamente.")
-            continue #printa informando e nao tira a chance de chute tambem
-        
-        if tentativa == palavra: #se a tentativa for igual a palavra printa uma mensagem
-            print(f"Parabéns! Você acertou: {palavra}")
-            break
-        else:
-            resultado = verificar_tentativa(palavra, tentativa) #se não, retorna as letras que estão na posição correta
-            print(f"Letras corretas: {resultado}")
+# Seleção de palavra
+palavra = escolher_palavra(letra_inicial, quantidade_letras)
+
+# Definir tentativas
+tentativas_maximas = 5
+tentativas = 0
+
+# Loop principal do jogo
+while tentativas < tentativas_maximas:
+    tentativa = input(f"Tentativa {tentativas + 1}: ").lower()
+    tentativa = remover_acentos(tentativa)
+
+    if len(tentativa) != len(palavra):
+        print(f"A palavra deve ter exatamente {len(palavra)} letras. Tente novamente.")
+        continue
+
+    if tentativa[0] != letra_inicial:
+        print(f"A palavra deve começar com a letra '{letra_inicial}'. Tente novamente.")
+        continue
+
+    if tentativa == palavra:
+        print(f"Parabéns! Você acertou: {palavra}")
+        break
     else:
-        print(f"Fim de jogo! A palavra era: {palavra}") #print final caso a pessoa erre todos os chutes
+        resultado = verificar_tentativa(palavra, tentativa)
+        print(f"Letras corretas e na posição certa: {resultado}")
+    
+    tentativas += 1
+else:
+    print(f"Fim de jogo! A palavra era: {palavra}")
