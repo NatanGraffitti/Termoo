@@ -1,4 +1,4 @@
-<h2 align="center"> Termoo - Jogo de Adivinhação de Palavras </h2>
+# Termoo - Jogo de Adivinhação de Palavras 
 
 O Termoo é um jogo de adivinhação em que o jogador precisa descobrir uma palavra com um número específico de letras (5, 6 ou 7). 
 A palavra começa com uma vogal determinada pelo jogador e é escolhida aleatoriamente entre várias listas de palavras.
@@ -18,7 +18,7 @@ O sistema escolhe aleatoriamente a palavra "amparo".
 O jogador tenta "amigo" e recebe a dica "a_m__".
 O jogador tenta "amparo" e acerta!
 
-<h4 align="center"> Objetivo: </h4>
+# Objetivo: 
 Acertar a palavra antes de esgotar as tentativas!
 
 Versão necessária:
@@ -39,7 +39,7 @@ O código usa apenas bibliotecas padrão, sendo assim apenas é necessária a ve
 
 3. Como rodar o código:
 
-<h4 align="center"> Para rodar o código no seu terminal, basta seguir as etapas abaixo: </h4>
+# Para rodar o código no seu terminal, basta seguir as etapas abaixo:
 - Salve o código Python em um arquivo chamado, por exemplo, termoo.py
 Crie o ambiente virtual (opcional, mas recomendado):
 Se preferir, você pode criar um ambiente virtual para rodar o jogo sem afetar o sistema global de pacotes Python:
